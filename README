@@ -1,0 +1,40 @@
+xPL TTS
+========
+
+These modules are intended to provide a small TTS client for Perl
+Installation
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make install
+
+Test: 
+   xpl-hub should already be running 
+      xpl-hub -i eth0 
+
+   
+
+Dependencies
+   * sudo apt-get install libyaml-perl
+
+   * xpl-perl
+     git clone  https://github.com/beanz/xpl-perl/
+     cd xpl-perl 
+     perl Makefile.PL
+      make
+      make test
+      make install
+
+   * mpg321
+      sudo apt-get install mpg321 
+
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2013 by Philippe CARLIER
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.7 or,
+at your option, any later version of Perl 5 you may have available.
