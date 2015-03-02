@@ -1,0 +1,52 @@
+#!/bin/sh
+# Startup script for xpl-tts
+#
+# description: Start xpl-hub, xpl-tts deaemon
+ 
+start() {
+   echo  "Starting xpl-hub: "
+   xpl-hub  >> /var/log/xpl/xpl-hub 2>/dev/null &
+   
+   sleep 2
+   echo  "Starting xpl-tts: "
+   echo "$SRCPATH/xpl-tts.pl"
+   $SRCPATH/xpl-tts.pl
+ 
+   return 0
+}
+
+killFx() {
+   PGM=$1
+   echo  "Shutting down $PGM "
+   killall $PGM
+   
+   return 0
+}
+
+stop() {
+	killFx xpl-hub
+	killFx xpl-tts.pl
+}
+
+status() {
+	ps -eaf | grep "xpl-"
+}
+ 
+case "$1" in
+start)
+        start
+        ;;
+stop)
+        stop
+        ;;
+status)
+		status
+		;;
+restart)
+        stop
+        start
+        ;;
+*)
+        echo "Usage: S99xpl-tts {start|stop|status|restart}"
+        exit 1
+esac
