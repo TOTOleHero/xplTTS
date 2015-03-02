@@ -1,5 +1,5 @@
 bin
-bin/xpl-tts-srv.pl
-bin/xpl-tts.sh
+bin/xpl-tts.pl
+bin/xpl-tts-say.sh
 MANIFEST
 README
