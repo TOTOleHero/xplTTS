@@ -1,5 +1,4 @@
-xPL TTS
-========
+# XPL TTS
 
 These modules are intended to provide a small TTS Server for Perl (listening to xpl message)
 Installation
@@ -7,10 +6,10 @@ Installation
 To install this module type the following:
 
 
-Dependencies
-   * sudo apt-get install libyaml-perl wget
+#Dependencies
+ * sudo apt-get install libyaml-perl wget
 
-   * xpl-perl
+ * xpl-perl
      git clone  https://github.com/beanz/xpl-perl/
      cd xpl-perl 
      perl Makefile.PL
@@ -18,14 +17,14 @@ Dependencies
       make test
       make install
 
-   * mpg321
+ * mpg321
       sudo apt-get install mpg321 
 
    perl Makefile.PL
    make
    make install
 
-Test: 
+# Test: 
    1) xpl-hub should already be running on the server
       xpl-hub -i eth0 
    2) launch xpl-tts.pl
@@ -36,7 +35,7 @@ Test:
         xpl-sender -m xpl-cmnd -c tts.basic voice="google" speech="bonjour"
 
 
-= FAQ = 
+#FAQ
 * on a raspberry pi: 
   mpg123 won't play on raspberry pi due to permission problem
  sudo chmod o+rw /dev/snd/controlC0
