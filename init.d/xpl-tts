@@ -9,8 +9,7 @@ start() {
    
    sleep 2
    echo  "Starting xpl-tts: "
-   echo "$SRCPATH/xpl-tts.pl"
-   $SRCPATH/xpl-tts.pl
+   ./xpl-tts.pl >> /var/log/xpl/xpl-tts.pl 2> /dev/null &
  
    return 0
 }

@@ -25,9 +25,10 @@ my $help;
 my $wait = 5; 
 my $xpl;
 
-my $defaultVoice = "google"; 
+my $defaultVoice  = "google"; 
+my $defaultVolume = "60";
 
-
+# TODO: property file
 my %voices = (
 	"google" => "http://translate.google.com/translate_tts?ie=UTF-8&tl=fr&q=#TEXT#", 
 	"agnes"  => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Agnes&text=#TEXT#", 
@@ -42,7 +43,6 @@ my %voices = (
 	"yeti" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Yeti&text=#TEXT#",
 	"bicool" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Bicool&text=#TEXT#",
 	);
-
 
 #------------------------------------------------------------------------------------------------------------
 #                                                   common functions
@@ -71,7 +71,7 @@ sub hub_found_response{
 	$xpl->remove_event_callback("hub_connect");
   	$xpl->remove_timer("hub_timeout");
 
-	tts($defaultVoice , "La synthèse vocale est opérationnelle");
+	tts($defaultVoice , "voila :La synthèse vocale est opérationnelle",80);
 }
 
 sub hub_timeout{
@@ -84,8 +84,9 @@ sub tts_callback() {
 
 	my $speech = $msg->field("speech");
 	my $voice  = $msg->field("voice");
+	my $volume = $msg->field("volume");
 
-	tts($voice,$speech); 
+	tts($voice,$speech,$volume);
 } 
 
 
@@ -98,9 +99,9 @@ sub getFilename($$) {
 	return $filename;
 }
 
-sub tts($) {
-	my ($voice,$text) = @_;
-	XplPrint("TTS voice:$voice text: $text\n");
+sub tts($$$) {
+	my ($voice,$text,$volume) = @_;
+	XplPrint("TTS voice:$voice volume:$volume text: $text\n");
 
 	my $textEncode = uri_escape($text); 
 
@@ -124,7 +125,7 @@ sub tts($) {
 		XplPrint("File already available: $filename");
 	}
 	
-	XplSystem( "mpg321 $filename"); 
+	XplSystem( "mpg321 $filename -g $volume"); 
 	
 }
 
