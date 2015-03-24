@@ -1,15 +1,20 @@
 #!/bin/sh
+
 # Startup script for xpl-tts
 #
 # description: Start xpl-hub, xpl-tts deaemon
+
+INST=/usr/local/bin/
+
  
 start() {
+   echo "PATH: $INST"
    echo  "Starting xpl-hub: "
-   xpl-hub  >> /var/log/xpl/xpl-hub 2>/dev/null &
+   $INST/xpl-hub  >> /var/log/xpl/xpl-hub 2>/dev/null &
    
    sleep 2
    echo  "Starting xpl-tts: "
-   ./xpl-tts.pl >> /var/log/xpl/xpl-tts.pl 2> /dev/null &
+   $INST/xpl-tts.pl >> /var/log/xpl/xpl-tts.pl 2> /dev/null &
  
    return 0
 }
