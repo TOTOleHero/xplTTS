@@ -31,7 +31,7 @@ To install this module type the following:
 
 # auto launch
    from your source path 
-   cd init.d/
+   cd install.sh
    sudo ./install.sh
 
 
