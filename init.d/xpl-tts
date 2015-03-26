@@ -1,52 +1,62 @@
 #!/bin/sh
+
+
 # Startup script for xpl-tts
 #
 # description: Start xpl-hub, xpl-tts deaemon
- 
-start() {
-   echo  "Starting xpl-hub: "
-   xpl-hub  >> /var/log/xpl/xpl-hub 2>/dev/null &
-   
-   sleep 2
-   echo  "Starting xpl-tts: "
-   echo "$SRCPATH/xpl-tts.pl"
-   $SRCPATH/xpl-tts.pl
- 
-   return 0
-}
 
-killFx() {
-   PGM=$1
-   echo  "Shutting down $PGM "
-   killall $PGM
-   
-   return 0
-}
+### BEGIN INIT INFO
+# Provides:               xpl-tts
+# Required-Start:
+# Required-Stop:
+# Default-Start:         2 3 4 5
+# Default-Stop:   0 1 6
+# Short-Description: XPL Hub service
+# Description:     Start XPL Hub and XPL TTS
+### END INIT INFO
 
-stop() {
-	killFx xpl-hub
-	killFx xpl-tts.pl
-}
 
-status() {
-	ps -eaf | grep "xpl-"
-}
- 
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+HUB_NAME=xpl-hub
+TTS_NAME=xpl-tts.pl
+DAEMON_PATH=/usr/local/bin/
+HUB_PIDFILE=/var/run/$HUB_NAME.pid
+TTS_PIDFILE=/var/run/$TTS_NAME.pid
+
 case "$1" in
-start)
-        start
+  start)
+        echo -n "Starting XPL Hub: "
+        start-stop-daemon --start  --pidfile $HUB_PIDFILE --make-pidfile  --background --no-close --chdir $DAEMON_PATH --exec $HUB_NAME > /dev/null 2>&1
+        start-stop-daemon --start  --pidfile $TTS_PIDFILE --make-pidfile  --background --no-close --chdir $DAEMON_PATH --exec $TTS_NAME > /dev/null 2>&1
+
+        echo "done."
         ;;
-stop)
-        stop
+  stop)
+        echo -n "Stopping XPL Hub: "
+        start-stop-daemon --stop --quiet --pidfile $HUB_PIDFILE
+        rm $HUB_PIDFILE
+        start-stop-daemon --stop --quiet --pidfile $TTS_PIDFILE
+        rm $TTS_PIDFILE
+
+        echo "done."
         ;;
-status)
-		status
-		;;
-restart)
-        stop
-        start
+  restart)
+        echo "Restarting XPL Hub: "
+        sh $0 stop
+        sleep 10
+        sh $0 start
         ;;
-*)
-        echo "Usage: S99xpl-tts {start|stop|status|restart}"
-        exit 1
+  save)
+        echo "Saving XPL Hub configuration"
+        PID=`sed s/[^0-9]//g $HUB_PIDFILE`
+        /bin/kill -10 $PID
+        PID=`sed s/[^0-9]//g $TTS_PIDFILE`
+        /bin/kill -10 $PID
+        ;;
+  *)
+        echo "Usage: /etc/init.d/xpl-tts {start|stop|restart|save}"
+t 1
+        ;;
 esac
+exit 0
