@@ -22,19 +22,6 @@ To install this module type the following:
 
 # install 
 
-   WARNING : this is a beta version, script are launched with 'root' user
-
-
-   perl Makefile.PL
-   make
-   make install
-
-# auto launch
-   from your source path 
-   cd install.sh
-   sudo ./install.sh
-
-
 
 # Test: 
    1) xpl-hub should already be running on the server
