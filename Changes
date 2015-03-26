@@ -2,6 +2,9 @@ Revision history for Perl xpl-tts.
 
 {{$NEXT}}
 
+0.02 2015/03/22 
+	- Add voice selection
+        - Cache mechanism : a different file for each voice
 
 0.01 2015/02/03 14:48:27 (UTC+0100)
 

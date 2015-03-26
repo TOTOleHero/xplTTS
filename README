@@ -1,25 +1,15 @@
-xPL TTS
-========
+# XPL TTS
 
-These modules are intended to provide a small TTS client for Perl
+These modules are intended to provide a small TTS Server for Perl (listening to xpl message)
 Installation
 
 To install this module type the following:
 
-   perl Makefile.PL
-   make
-   make install
 
-Test: 
-   xpl-hub should already be running 
-      xpl-hub -i eth0 
+#Dependencies
+ * sudo apt-get install libyaml-perl wget
 
-   
-
-Dependencies
-   * sudo apt-get install libyaml-perl
-
-   * xpl-perl
+ * xpl-perl
      git clone  https://github.com/beanz/xpl-perl/
      cd xpl-perl 
      perl Makefile.PL
@@ -27,14 +17,57 @@ Dependencies
       make test
       make install
 
-   * mpg321
+ * mpg321
       sudo apt-get install mpg321 
+
+# install 
+
+   WARNING : this is a beta version, script are launched with 'root' user
+
+
+   perl Makefile.PL
+   make
+   make install
+
+# auto launch
+   from your source path 
+   cd install.sh
+   sudo ./install.sh
+
+
+
+# Test: 
+   1) xpl-hub should already be running on the server
+      xpl-hub -i eth0 
+   2) launch xpl-tts.pl
+      ./xpl-tts.pl &
+   3)
+        ./xpl-tts-say.sh "bonjour test de message"
+    or 
+        xpl-sender -m xpl-cmnd -c tts.basic voice="google" speech="bonjour"
+
+
+#FAQ
+* on a raspberry pi: 
+  mpg123 won't play on raspberry pi due to permission problem
+ sudo chmod o+rw /dev/snd/controlC0
+  one might also try the more drastic
+ chmod o+rw /dev/snd/*
+
 
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2013 by Philippe CARLIER
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.7 or,
-at your option, any later version of Perl 5 you may have available.
+This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>. 1

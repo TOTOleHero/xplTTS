@@ -13,7 +13,8 @@ use URI::Escape;
 
 use Digest::SHA qw(sha1_hex);
 
-our $VERSION = '0.12';
+
+our $VERSION = '0.13';
 
 $| = 1;    # autoflush helps debugging
 
@@ -24,6 +25,25 @@ my $help;
 my $wait = 5; 
 my $xpl;
 
+my $defaultVoice  = "google"; 
+my $defaultVolume = "60";
+
+# TODO: property file
+my %voices = (
+	"google" => "http://translate.google.com/translate_tts?ie=UTF-8&tl=fr&q=#TEXT#", 
+	"agnes"  => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Agnes&text=#TEXT#", 
+	"loic"   => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Loic&text=#TEXT#",
+	"papi"   => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Papi&text=#TEXT#",
+	"electra" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Electra&text=#TEXT#",
+	"robot" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Robot&text=#TEXT#",
+	"sorciere" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Sorciere&text=#TEXT#",
+	"melodine" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Melodine&text=#TEXT#",
+	"ramboo" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Ramboo&text=#TEXT#",
+	"chut" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Chut&text=#TEXT#",
+	"yeti" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Yeti&text=#TEXT#",
+	"bicool" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Bicool&text=#TEXT#",
+	);
+
 #------------------------------------------------------------------------------------------------------------
 #                                                   common functions
 #------------------------------------------------------------------------------------------------------------
@@ -31,22 +51,19 @@ my $xpl;
 sub XplPrint($) {
 	my ($msg) =@_;
 	printf("%s %-8.8s %s\n", POSIX::strftime("%d/%m/%Y %H:%M:%S", localtime ) , "INFO", $msg); 
-	
+}
+
+sub XplError($) {
+	my ($msg) =@_;
+	printf("%s %-8.8s %s\n", POSIX::strftime("%d/%m/%Y %H:%M:%S", localtime  ) , "ERROR", $msg); 
 }
 
 sub XplSystem($) {
 	my ($cmd) = @_;
-	#XplPrint("System \"$cmd\"");
+	XplPrint("System \"$cmd\"");
 	system($cmd);
 	#XplPrint("System done ($?)\n");
 }
-
-sub XplNotifyError($$) {
-	my ($msg) =@_;
-	# light version just display error
-	printf("%s %-8.8s %s\n", POSIX::strftime("%d/%m/%Y %H:%M:%S", localtime  ) , "ERROR", $msg); 
-}
-
 
 
 sub hub_found_response{
@@ -54,50 +71,61 @@ sub hub_found_response{
 	$xpl->remove_event_callback("hub_connect");
   	$xpl->remove_timer("hub_timeout");
 
-	tts("La synthèse vocale est opérationnelle");
+	tts($defaultVoice , "voila :La synthèse vocale est opérationnelle",80);
 }
 
 sub hub_timeout{
-	XplNotifyError("fatal hub_timeout","");
+	XplError("fatal hub_timeout (please verify xpl hub is running on localhost)");
 }
 
 sub tts_callback() {
 	my %p   = @_;
 	my $msg = $p{message};
-	my $speech = $msg->field("speech");
 
-	tts($speech); 
+	my $speech = $msg->field("speech");
+	my $voice  = $msg->field("voice");
+	my $volume = $msg->field("volume");
+
+	tts($voice,$speech,$volume);
 } 
 
 
-sub getFilename($) {
-	my ($msg) = @_;
+sub getFilename($$) {
+	my ($voice,$msg) = @_;
 
-	my $filename = sprintf("%s/%s.mp3" , "/tmp", sha1_hex($msg) ) ; 
-	print "[$msg] : $filename\n";
+	my $filename = sprintf("%s/%s.mp3" , "/tmp", sha1_hex($voice.$msg) ) ; 
+	XplPrint("[$voice][$msg] : $filename");
 
 	return $filename;
 }
 
-sub tts($) {
-	my ($msg) = @_;
-	XplPrint("TTS speed: $msg\n");
+sub tts($$$) {
+	my ($voice,$text,$volume) = @_;
+	XplPrint("TTS voice:$voice volume:$volume text: $text\n");
 
-	my $file = $msg;
-	my $speechEncode = uri_escape($msg); 
+	my $textEncode = uri_escape($text); 
 
-	my $filename = getFilename($msg);	
+	# verify voice
+	unless (defined( $voices{$voice} ) ) {	
+		XplError("unknown voice [$voice], fallback to default voice");
+		$voice = $defaultVoice; 
+	}
 
+	my $ttsUrl = $voices{$voice}; 
+	$ttsUrl =~ s/#TEXT#/$textEncode/; 
+
+	my $filename = getFilename($voice,$text);	
 
 	unless (-f $filename) {
-		XplPrint("Request file");
-		XplSystem( qq{ wget -q -U Mozilla -O $filename "http://translate.google.com/translate_tts?ie=UTF-8&tl=fr&q=$speechEncode" } ); 
+		XplPrint("Request file ");
+
+		XplSystem( qq{ wget -q -U Mozilla -O $filename "$ttsUrl" } ); 
 		XplSystem( qq{ ls -la $filename } ); 
 	} else {
-		XplPrint("File already available: $file");
+		XplPrint("File already available: $filename");
 	}
 	
-	XplSystem( "mpg321 $filename"); 
+	XplSystem( "mpg321 $filename -g $volume"); 
 	
 }
 
@@ -105,7 +133,6 @@ sub main() {
 
 	# Create an xPL Client object
 	$xpl = xPL::Client->new( %args) or die "Failed to create xPL::Client\n";
-
 
 	GetOptions(
 		'interface=s' => \$interface,
@@ -124,7 +151,7 @@ sub main() {
 	        self_skip => 0, targetted => 0, 
 		    callback  => \&tts_callback,
 			filter    => {
-				class        => "tts",
+			class        => "tts",
 		} );
 
 	$xpl->add_timer(id => 'hub_timeout', timeout => $wait, callback => \&hub_timeout);

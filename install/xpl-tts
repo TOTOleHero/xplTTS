@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 # Startup script for xpl-tts
 #
 # description: Start xpl-hub, xpl-tts deaemon
@@ -40,8 +39,7 @@ case "$1" in
         rm $TTS_PIDFILE
 
         echo "done."
-        ;;
-  restart)
+tart)
         echo "Restarting XPL Hub: "
         sh $0 stop
         sleep 10
@@ -56,7 +54,7 @@ case "$1" in
         ;;
   *)
         echo "Usage: /etc/init.d/xpl-tts {start|stop|restart|save}"
-t 1
+        exit 1
         ;;
 esac
 exit 0
