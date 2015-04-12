@@ -28,6 +28,8 @@ my $xpl;
 my $defaultVoice  = "google"; 
 my $defaultVolume = "60";
 
+my $defaultPath   = "/var/cache/xpl-tts"; 
+
 # TODO: property file
 my %voices = (
 	"google" => "http://translate.google.com/translate_tts?ie=UTF-8&tl=fr&q=#TEXT#", 
@@ -42,6 +44,20 @@ my %voices = (
 	"chut" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Chut&text=#TEXT#",
 	"yeti" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Yeti&text=#TEXT#",
 	"bicool" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Bicool&text=#TEXT#",
+	"philippe" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Philippel&text=#TEXT#",
+	"damien" =>"http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Damien&text=#TEXT#",
+	"darkvador"=> "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=DarkVadoor&text=#TEXT#",
+
+	"john" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=John&text=#TEXT#",
+	"helene" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Helene&text=#TEXT#",
+	"eva" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Eva&text=#TEXT#",
+
+	"zozo" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Zozo&text=#TEXT#",
+
+
+
+
+	
 	);
 
 #------------------------------------------------------------------------------------------------------------
@@ -90,13 +106,20 @@ sub tts_callback() {
 } 
 
 
-sub getFilename($$) {
-	my ($voice,$msg) = @_;
+sub getFilename($$$) {
+	my ($voice,$msg,$ext) = @_;
 
-	my $filename = sprintf("%s/%s.mp3" , "/tmp", sha1_hex($voice.$msg) ) ; 
+	my $filename = sprintf("%s/%s.%s" , $defaultPath, sha1_hex($voice.$msg), $ext ) ; 
 	XplPrint("[$voice][$msg] : $filename");
 
 	return $filename;
+}
+
+sub writeFile($$) {
+	my ($file,$content) = @_;
+	open (my $fh, ">" , $file);
+	print  $fh  $content;
+	close $fh;
 }
 
 sub tts($$$) {
@@ -114,13 +137,19 @@ sub tts($$$) {
 	my $ttsUrl = $voices{$voice}; 
 	$ttsUrl =~ s/#TEXT#/$textEncode/; 
 
-	my $filename = getFilename($voice,$text);	
+	my $filename = getFilename($voice,$text,"mp3");	
+	my $descFile = getFilename($voice,$text,"dsc");
 
 	unless (-f $filename) {
 		XplPrint("Request file ");
 
 		XplSystem( qq{ wget -q -U Mozilla -O $filename "$ttsUrl" } ); 
 		XplSystem( qq{ ls -la $filename } ); 
+
+		writeFile($descFile,qq{Voice:$voice\nText:$text} );
+
+		
+	
 	} else {
 		XplPrint("File already available: $filename");
 	}
