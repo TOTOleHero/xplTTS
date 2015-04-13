@@ -25,7 +25,7 @@ my $help;
 my $wait = 5; 
 my $xpl;
 
-my $defaultVoice  = "google"; 
+my $defaultVoice  = "eva"; 
 my $defaultVolume = "60";
 
 my $defaultPath   = "/var/cache/xpl-tts"; 
@@ -87,7 +87,7 @@ sub hub_found_response{
 	$xpl->remove_event_callback("hub_connect");
   	$xpl->remove_timer("hub_timeout");
 
-	tts($defaultVoice , "voila :La synthèse vocale est opérationnelle",80);
+	tts($defaultVoice , "La synthèse vocale est opérationnelle",80);
 }
 
 sub hub_timeout{
