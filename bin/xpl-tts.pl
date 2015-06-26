@@ -25,7 +25,7 @@ my $help;
 my $wait = 5; 
 my $xpl;
 
-my $defaultVoice  = "eva"; 
+my $defaultVoice  = "zozo"; 
 my $defaultVolume = "60";
 
 my $defaultPath   = "/var/cache/xpl-tts"; 
@@ -33,26 +33,26 @@ my $defaultPath   = "/var/cache/xpl-tts";
 # TODO: property file
 my %voices = (
 	"google" => "http://translate.google.com/translate_tts?ie=UTF-8&tl=fr&q=#TEXT#", 
-	"agnes"  => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Agnes&text=#TEXT#", 
-	"loic"   => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Loic&text=#TEXT#",
-	"papi"   => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Papi&text=#TEXT#",
-	"electra" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Electra&text=#TEXT#",
-	"robot" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Robot&text=#TEXT#",
-	"sorciere" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Sorciere&text=#TEXT#",
-	"melodine" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Melodine&text=#TEXT#",
-	"ramboo" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Ramboo&text=#TEXT#",
-	"chut" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Chut&text=#TEXT#",
-	"yeti" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Yeti&text=#TEXT#",
-	"bicool" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Bicool&text=#TEXT#",
-	"philippe" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Philippel&text=#TEXT#",
-	"damien" =>"http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Damien&text=#TEXT#",
-	"darkvador"=> "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=DarkVadoor&text=#TEXT#",
+	"agnes"  => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Agnes&text=#TEXT#", 
+	"loic"   => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Loic&text=#TEXT#",
+	"papi"   => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Papi&text=#TEXT#",
+	"electra" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Electra&text=#TEXT#",
+	"robot" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Robot&text=#TEXT#",
+	"sorciere" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Sorciere&text=#TEXT#",
+	"melodine" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Melodine&text=#TEXT#",
+	"ramboo" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Ramboo&text=#TEXT#",
+	"chut" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Chut&text=#TEXT#",
+	"yeti" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Yeti&text=#TEXT#",
+	"bicool" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Bicool&text=#TEXT#",
+	"philippe" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Philippel&text=#TEXT#",
+	"damien" =>"https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Damien&text=#TEXT#",
+	"darkvador"=> "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=DarkVadoor&text=#TEXT#",
 
-	"john" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=John&text=#TEXT#",
-	"helene" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Helene&text=#TEXT#",
-	"eva" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Eva&text=#TEXT#",
+	"john" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=John&text=#TEXT#",
+	"helene" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Helene&text=#TEXT#",
+	"eva" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Eva&text=#TEXT#",
 
-	"zozo" => "http://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Zozo&text=#TEXT#",
+	"zozo" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Zozo&text=#TEXT#",
 
 
 
@@ -87,7 +87,7 @@ sub hub_found_response{
 	$xpl->remove_event_callback("hub_connect");
   	$xpl->remove_timer("hub_timeout");
 
-	tts($defaultVoice , "La synthèse vocale est opérationnelle",80);
+	tts("sorciere", "La synthèse vocale est opérationnelle",80);
 }
 
 sub hub_timeout{
@@ -143,7 +143,7 @@ sub tts($$$) {
 	unless (-f $filename) {
 		XplPrint("Request file ");
 
-		XplSystem( qq{ wget -q -U Mozilla -O $filename "$ttsUrl" } ); 
+		XplSystem( qq{ wget --no-check-certificate -v -U Mozilla -O $filename "$ttsUrl" } ); 
 		XplSystem( qq{ ls -la $filename } ); 
 
 		writeFile($descFile,qq{Voice:$voice\nText:$text} );
