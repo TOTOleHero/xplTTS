@@ -47,16 +47,17 @@ my %voices = (
 	"philippe" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Philippel&text=#TEXT#",
 	"damien" =>"https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Damien&text=#TEXT#",
 	"darkvador"=> "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=DarkVadoor&text=#TEXT#",
+	"jeanjean" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=JeanJean&text=#TEXT#",
+
+	"matteo" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Matteo&text=#TEXT#",
 
 	"john" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=John&text=#TEXT#",
 	"helene" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Helene&text=#TEXT#",
 	"eva" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Eva&text=#TEXT#",
+	"emma" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Emma&text=#TEXT#",
 
 	"zozo" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Zozo&text=#TEXT#",
-
-
-
-
+	"sidoo" => "https://www.voxygen.fr/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&voice=Sidoo&text=#TEXT#",
 	
 	);
 
@@ -87,7 +88,7 @@ sub hub_found_response{
 	$xpl->remove_event_callback("hub_connect");
   	$xpl->remove_timer("hub_timeout");
 
-	tts("sorciere", "La synthèse vocale est opérationnelle",80);
+	tts("robot", "La synthèse vocale est opérationnelle",80);
 }
 
 sub hub_timeout{
