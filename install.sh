@@ -37,5 +37,7 @@ case "$1" in
 	;;
   *)
 	echo "$0 [server|client]"
+	echo " server: install daemon and client files"
+        echo " client: client tool only"
 	;;
 esac

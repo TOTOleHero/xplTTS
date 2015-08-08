@@ -140,7 +140,7 @@ sub tts($$$) {
 	my $filename = getFilename($voice,$text,"mp3");	
 	my $descFile = getFilename($voice,$text,"dsc");
 
-	unless (-f $filename) {
+	unless (-s $filename) {
 		XplPrint("Request file ");
 
 		XplSystem( qq{ wget --no-check-certificate -v -U Mozilla -O $filename "$ttsUrl" } ); 
