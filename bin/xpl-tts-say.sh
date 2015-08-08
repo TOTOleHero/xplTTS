@@ -1,25 +1,55 @@
 #! /bin/bash
+OPTIND=1  
 
-DEFVOICE="google"
-DEFVOLUME="80"
 
 if test  "$#" -lt 1; then
-    echo "xpl-tts-say.sh [message] [voice] [volume]"
-    echo "voice  : google, agnes, loic, papi, electra, robot, sorciere, melodine, ramboo, chut, yeti, bicool"
-    echo "volume : 0 to 100"
+    echo "xpl-tts-say.sh [message] -v [voice] -l [level]"
+    echo " voice  : google, agnes, loic, papi, electra, robot, sorciere, melodine, ramboo, chut, yeti, bicool philippe damien darkvador john helene eva zozo"
+    echo " level : 0 to 100"
     echo " " 
     echo " samples:"
-    echo "    xpl-tts-say.sh \"bonjour, test de message\"  google"
-    echo "    xpl-tts-say.sh \"bonjour, test de message\"  yeti"
+    echo "    xpl-tts-say.sh \"bonjour, test de message\"  -v google"
+    echo "    xpl-tts-say.sh \"bonjour, test de message\"  -v yeti"
     exit -1
 fi
 
-MESSAGE=$1
-VOICE=${2:$DEFVOICE}
-VOLUME=$3
+# default
+MESSAGE=""
+VOICE="loic"
+LEVEL="100"
 
-echo "MESSAGE : $MESSAGE"
-echo "VOICE   : $VOICE"
-echo "VOLUME  : $VOLUME"
+while [[ $# > 1 ]]
+do
+key="$1"
 
-xpl-sender -m xpl-cmnd -c tts.basic voice="$VOICE" speech="$MESSAGE" volume="$VOLUME"
+case $key in    
+
+    -v|--voice)
+    VOICE="$2"
+    shift 
+    ;;
+    -l|--level)
+    LEVEL="$2"
+    shift
+    ;;
+    --default)
+    DEFAULT=YES
+    shift # past argument with no value
+    ;;
+    *)
+	echo "?? $key"
+	MESSAGE="$MESSAGE $key"
+            # unknown option
+    ;;
+esac
+shift
+done
+
+MESSAGE="$MESSAGE $@"
+
+
+echo "MESSAGE : $MESSAGE" >> /tmp/xplTTS.log
+echo "VOICE   : $VOICE"   >> /tmp/xplTTS.log
+echo "LEVEL   : $LEVEL"   >> /tmp/xplTTS.log
+
+xpl-sender -m xpl-cmnd -c tts.basic voice="$VOICE" speech="$MESSAGE" volume="$LEVEL"
