@@ -4,7 +4,12 @@ OPTIND=1
 
 if test  "$#" -lt 1; then
     echo "xpl-tts-say.sh [message] -v [voice] -l [level]"
-    echo " voice  : google, agnes, loic, papi, electra, robot, sorciere, melodine, ramboo, chut, yeti, bicool philippe damien darkvador john helene eva zozo"
+    echo " voice  : google, "
+    echo "          loic, papi, electra, robot, sorciere,ramboo,  yeti, philippe darkvador john helene zozo"
+    echo "            enfant : emma, matteo (enfant) "
+    echo "            fun   : bicool , chut, melodine(chante), darkvador"
+    echo "            homme : damien (x) ludovic loic (x) jeanjean (quebec) john (americain)"
+    echo "            femme : electra (sensuelle) agnes (claire) fabienne eva"
     echo " level : 0 to 100"
     echo " " 
     echo " samples:"
@@ -37,7 +42,6 @@ case $key in
     shift # past argument with no value
     ;;
     *)
-	echo "?? $key"
 	MESSAGE="$MESSAGE $key"
             # unknown option
     ;;
@@ -47,7 +51,7 @@ done
 
 MESSAGE="$MESSAGE $@"
 
-
+echo "----------------------" >> /tmp/xplTTS.log
 echo "MESSAGE : $MESSAGE" >> /tmp/xplTTS.log
 echo "VOICE   : $VOICE"   >> /tmp/xplTTS.log
 echo "LEVEL   : $LEVEL"   >> /tmp/xplTTS.log
