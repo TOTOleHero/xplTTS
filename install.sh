@@ -19,6 +19,9 @@ function install_server {
 
         echo "Install init.d script: "
         cp $INIT_SCRIPT /etc/init.d/
+	chmod 755 /etc/init.d/$INIT_SCRIPT
+	chown root:root $INIT_SCRIPT
+	ls -la $INIT_SCRIPT
         update-rc.d xpl-tts defaults
 }
 
